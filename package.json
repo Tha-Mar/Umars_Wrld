@@ -1,0 +1,24 @@
+{
+  "name": "umars-wrld",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "^0.176.0",
+    "@react-three/fiber": "^9.1.2",
+    "@react-three/drei": "^10.3.5",
+    "@react-three/rapier": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^9",
+    "eslint-config-next": "^15.3.1"
+  }
+}
