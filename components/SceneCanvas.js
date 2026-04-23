@@ -4,31 +4,10 @@ import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import Experience from './Experience';
 
-function Loader() {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        inset: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#0a0a0a',
-        color: '#fff',
-        fontFamily: 'sans-serif',
-        fontSize: '1rem',
-        letterSpacing: '0.1em',
-      }}
-    >
-      Loading...
-    </div>
-  );
-}
-
 export default function SceneCanvas() {
   return (
     <div style={{ position: 'absolute', inset: 0 }}>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <Canvas
           shadows
           dpr={[1, 2]}
