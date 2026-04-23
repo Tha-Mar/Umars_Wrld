@@ -28,6 +28,7 @@ export default function Hotspot({
   radius = 3,
   prompt = 'Press E to interact',
   audioSrc,
+  onInteract,
 }) {
   const { camera } = useThree();
   const hotspotPos = useRef(new THREE.Vector3(...position));
@@ -44,10 +45,11 @@ export default function Hotspot({
       if (e.code !== 'KeyE' || !inRangeRef.current || triggeredRef.current) return;
       triggeredRef.current = true;
       audioRef.current?.play().catch(() => {});
+      onInteract?.();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [onInteract]);
 
   useFrame(() => {
     _cam.copy(camera.position);

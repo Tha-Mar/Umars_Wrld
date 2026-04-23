@@ -18,12 +18,12 @@ import World from './World';
 function CinematicLights() {
   return (
     <>
-      <Environment preset="warehouse" intensity={0.36} />
-      <ambientLight intensity={0.035} color="#f1eeea" />
+      <Environment preset="warehouse" intensity={0.24} />
+      <ambientLight intensity={0.02} color="#efede9" />
       <group rotation={[0, Math.PI / 2, 0]}>
         <directionalLight
           position={[8, 10, 5]}
-          intensity={0.58}
+          intensity={0.62}
           color="#fff3e7"
           castShadow
           shadow-mapSize={[2048, 2048]}
@@ -34,10 +34,11 @@ function CinematicLights() {
           shadow-camera-top={14}
           shadow-camera-bottom={-14}
           shadow-bias={-0.00015}
+          shadow-normalBias={0.03}
         />
         <directionalLight
           position={[-6, 5, -8]}
-          intensity={0.18}
+          intensity={0.1}
           color="#dbe7f7"
         />
       </group>

@@ -52,6 +52,20 @@ export default function World() {
           prompt="Press E to interact"
           audioSrc="/audio/Ranting.mp3"
         />
+
+        <Hotspot
+          position={[-0.08, 0.4, 0]}
+          radius={1.8}
+          prompt="Press E to spin"
+          audioSrc="/audio/Oiiaioooooiai cat meme psytrance remix.mp3"
+          onInteract={() => {
+            window.dispatchEvent(
+              new CustomEvent('world:spin-model', {
+                detail: { targetName: '191d233c94184f188ac4fad4b07dc182fbx' },
+              }),
+            );
+          }}
+        />
       </Physics>
     </Suspense>
   );

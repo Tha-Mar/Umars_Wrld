@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -32,6 +33,12 @@ const DARK_WALL_COLOR = new THREE.Color('#636872');
 const DARK_WOOD_COLOR = new THREE.Color('#54514b');
 const DARK_METAL_COLOR = new THREE.Color('#727782');
 const WOOD_PANEL_COLOR = new THREE.Color('#8a6a4c');
+const SPIN_TARGET_NAME = '191d233c94184f188ac4fad4b07dc182fbx';
+const SEQUENCE_DURATION_MS = 60000;
+const DESCENT_DURATION_MS = 2000;
+const RAPID_SPIN_SPEED = 16;
+const LIFT_DURATION_MS = 1200;
+const TARGET_CENTER_Y = 1.55;
 
 function clampMaterialSurface(material) {
   if ('metalness' in material && typeof material.metalness === 'number') {
@@ -49,6 +56,24 @@ function hasUsableTexture(texture) {
 
 export default function GarageModel() {
   const { scene } = useGLTF('/models/garage_scene3.glb');
+  const spinTargetRef = useRef(null);
+  const interactionStartRef = useRef(0);
+  const baseRotationRef = useRef(0);
+  const baseYRef = useRef(0);
+  const liftOffsetRef = useRef(0);
+
+  useEffect(() => {
+    const target = scene.getObjectByName(SPIN_TARGET_NAME);
+    spinTargetRef.current = target ?? null;
+    baseRotationRef.current = target?.rotation.y ?? 0;
+    baseYRef.current = target?.position.y ?? 0;
+
+    if (target) {
+      const box = new THREE.Box3().setFromObject(target);
+      const center = box.getCenter(new THREE.Vector3());
+      liftOffsetRef.current = Math.max(0, TARGET_CENTER_Y - center.y);
+    }
+  }, [scene]);
 
   useEffect(() => {
     const correctedMeshes = new Set();
@@ -171,7 +196,7 @@ export default function GarageModel() {
         }
 
         if ('envMapIntensity' in nextMat) {
-          nextMat.envMapIntensity = isStructuralMesh ? 0.55 : 1.1;
+          nextMat.envMapIntensity = isStructuralMesh ? 0.18 : 0.9;
         }
 
         if (isStructuralMesh) {
@@ -212,6 +237,56 @@ export default function GarageModel() {
       );
     }
   }, [scene]);
+
+  useEffect(() => {
+    const onSpin = (e) => {
+      if (e.detail?.targetName !== SPIN_TARGET_NAME) return;
+      if (spinTargetRef.current) {
+        baseRotationRef.current = spinTargetRef.current.rotation.y;
+        baseYRef.current = spinTargetRef.current.position.y;
+      }
+      interactionStartRef.current = performance.now();
+    };
+
+    window.addEventListener('world:spin-model', onSpin);
+    return () => window.removeEventListener('world:spin-model', onSpin);
+  }, []);
+
+  useFrame((_, delta) => {
+    const target = spinTargetRef.current;
+    if (!target) return;
+
+    const start = interactionStartRef.current;
+    if (start === 0) return;
+
+    const now = performance.now();
+    const elapsed = now - start;
+
+    const isSpinning =
+      elapsed < 2000 ||
+      (elapsed >= 4000 && elapsed < 6000) ||
+      (elapsed >= 7000 && elapsed < SEQUENCE_DURATION_MS);
+
+    if (isSpinning) {
+      target.rotation.y += RAPID_SPIN_SPEED * delta;
+    }
+
+    let liftProgress = 0;
+    if (elapsed < LIFT_DURATION_MS) {
+      liftProgress = elapsed / LIFT_DURATION_MS;
+    } else if (elapsed < SEQUENCE_DURATION_MS) {
+      liftProgress = 1;
+    } else if (elapsed < SEQUENCE_DURATION_MS + DESCENT_DURATION_MS) {
+      liftProgress = 1 - (elapsed - SEQUENCE_DURATION_MS) / DESCENT_DURATION_MS;
+    }
+
+    target.position.y = baseYRef.current + liftOffsetRef.current * THREE.MathUtils.clamp(liftProgress, 0, 1);
+
+    if (elapsed >= SEQUENCE_DURATION_MS + DESCENT_DURATION_MS) {
+      target.position.y = baseYRef.current;
+      interactionStartRef.current = 0;
+    }
+  });
 
   return <primitive object={scene} />;
 }
