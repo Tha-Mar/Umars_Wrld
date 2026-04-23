@@ -5,6 +5,7 @@ import { Physics } from '@react-three/rapier';
 import GarageModel from './GarageModel';
 import GarageColliders from './GarageColliders';
 import Player from './Player';
+import Hotspot from './Hotspot';
 
 /*
  * World owns:
@@ -28,18 +29,29 @@ export default function World() {
   return (
     <Suspense fallback={null}>
       <Physics gravity={[0, -9.81, 0]}>
-        {/* Visual environment — render-only, no colliders */}
-        <Suspense fallback={null}>
-          <GarageModel />
-        </Suspense>
+        {/* Rotate the garage scene and its collision world together. */}
+        <group rotation={[0, Math.PI / 2, 0]}>
+          {/* Visual environment — render-only, no colliders */}
+          <Suspense fallback={null}>
+            <GarageModel />
+          </Suspense>
 
-        {/* Collision world — invisible blocking volumes */}
-        <GarageColliders />
+          {/* Collision world — invisible blocking volumes */}
+          <Suspense fallback={null}>
+            <GarageColliders />
+          </Suspense>
+        </group>
 
         {/* Player — capsule body + first-person controls */}
         <Player />
 
-        {/* Future: <Hotspots /> */}
+        {/* Hotspot: car interaction — adjust position/radius to match visual */}
+        <Hotspot
+          position={[-2, 0, -2]}
+          radius={3}
+          prompt="Press E to interact"
+          audioSrc="/audio/Ranting.mp3"
+        />
       </Physics>
     </Suspense>
   );

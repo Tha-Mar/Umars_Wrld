@@ -6,20 +6,19 @@ import { RigidBody, CapsuleCollider } from '@react-three/rapier';
 import * as THREE from 'three';
 
 // --- Tweak these to adjust feel ---
-const SPEED       = 0.8;   // units/sec — raise for faster walk, lower for slower
+const SPEED       = 5;     // units/sec
 const SENSITIVITY = 0.002; // mouse look — lower = slower turn, higher = snappier
-const EYE_OFFSET  = 0.02;  // camera height above capsule centre
+const EYE_OFFSET  = 0.7;   // camera height above capsule centre
 //
-// World-space room (root −90° X matrix applied):
-//   Floor Y ≈ −0.24.  Mid-room structure at Y ≈ +0.04 creates a 0.28-unit gap.
+// World-space room (garage_scene2.glb):
+//   Floor Y = 0. Ceiling Y ≈ 4.2. Room ≈ 18.7 wide × 8.2 deep.
 //
-// Capsule: halfHeight=0.06, radius=0.06 → total 0.24 units (fits gap with 0.04 clearance)
-//   Spawn at Y=−0.10: top=+0.02 (below structure at +0.04), bottom=−0.22 (above floor −0.24)
-//   Gravity drops capsule cleanly to floor. Settled centre: −0.24 + 0.12 = −0.12
-//   Eye Y: −0.12 + 0.02 = −0.10  (matches pre-physics camera feel)
+// Capsule: halfHeight=0.6, radius=0.3 → total 1.8 units
+//   Settled centre: 0 + 0.3 + 0.6 = 0.9
+//   Eye Y: 0.9 + 0.7 = 1.6
 
-const SPAWN         = [0, -0.10, 0.40]; // clear zone between floor and mid-room structure
-const FALL_RESET_Y  = -3;               // safety: teleport back if player escapes world
+const SPAWN         = [0, 0.9, -5];
+const FALL_RESET_Y  = -5;
 
 const UP = new THREE.Vector3(0, 1, 0);
 
@@ -131,7 +130,7 @@ export default function Player() {
       lockRotations
       colliders={false}
     >
-      <CapsuleCollider args={[0.06, 0.06]} />
+      <CapsuleCollider args={[0.6, 0.3]} />
     </RigidBody>
   );
 }

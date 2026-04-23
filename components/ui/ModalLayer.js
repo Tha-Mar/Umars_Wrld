@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import InteractionPrompt from './InteractionPrompt';
 
 /*
@@ -35,9 +36,13 @@ const styles = {
 };
 
 export default function ModalLayer() {
-  // activeModal and activePrompt will come from a shared store (e.g. Zustand)
-  const activeModal = null;
-  const activePrompt = null;
+  const [activePrompt, setActivePrompt] = useState(null);
+
+  useEffect(() => {
+    const handler = (e) => setActivePrompt(e.detail);
+    window.addEventListener('world:prompt', handler);
+    return () => window.removeEventListener('world:prompt', handler);
+  }, []);
 
   return (
     <div style={styles.root}>

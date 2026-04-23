@@ -31,11 +31,10 @@ export default function SceneCanvas() {
       <Suspense fallback={<Loader />}>
         <Canvas
           shadows
-          // Garage bounds: 1.91×2.5×0.78 units, centered at origin.
-          // Z 0.40 = just inside the entrance (front face at Z 0.33).
-          // Y 0.10 = eye level (~60% up a 2.5-unit room).
-          // FOV 70 adds perceived depth; near 0.05 prevents clipping near walls.
-          camera={{ position: [0, -0.10, 0.40], fov: 70, near: 0.05, far: 8 }}
+          dpr={[1, 2]}
+          gl={{ antialias: true }}
+          // Match the larger garage_scene2 room so distant walls and ceiling do not clip.
+          camera={{ position: [0, 1.6, 0], fov: 65, near: 0.1, far: 80 }}
           style={{ width: '100%', height: '100%' }}
         >
           <Experience />
