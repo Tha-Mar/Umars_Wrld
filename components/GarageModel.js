@@ -72,8 +72,11 @@ export default function GarageModel() {
       child.receiveShadow = true;
 
       const nextMaterials = material.map((mat) => {
+        let correctedSurface = false;
+
         if (!mat) {
           correctedMeshes.add(child.name);
+          correctedSurface = true;
           return new THREE.MeshStandardMaterial({
             color: NEUTRAL_FALLBACK,
             metalness: 0.1,
@@ -94,6 +97,7 @@ export default function GarageModel() {
             side: THREE.DoubleSide,
           });
           correctedMeshes.add(child.name);
+          correctedSurface = true;
         }
 
         const textureMissing = nextMat.map && !hasUsableTexture(nextMat.map);
@@ -109,6 +113,7 @@ export default function GarageModel() {
             side: THREE.DoubleSide,
           });
           correctedMeshes.add(child.name);
+          correctedSurface = true;
         }
 
         const isStructuralMesh = STRUCTURAL_NAME_RE.test(child.name);
@@ -120,6 +125,7 @@ export default function GarageModel() {
             ? new THREE.Color('#40444d')
             : NEUTRAL_FALLBACK.clone();
           correctedMeshes.add(child.name);
+          correctedSurface = true;
         }
 
         if (isStructuralMesh && nextMat.name?.includes('Slate black Wall Paint')) {
@@ -127,6 +133,7 @@ export default function GarageModel() {
           if ('metalness' in nextMat) nextMat.metalness = 0.05;
           if ('roughness' in nextMat) nextMat.roughness = 0.72;
           correctedMeshes.add(child.name);
+          correctedSurface = true;
         }
 
         if (isStructuralMesh && nextMat.name?.includes('Wood Black UA')) {
@@ -134,6 +141,7 @@ export default function GarageModel() {
           if ('metalness' in nextMat) nextMat.metalness = 0.08;
           if ('roughness' in nextMat) nextMat.roughness = 0.78;
           correctedMeshes.add(child.name);
+          correctedSurface = true;
         }
 
         if (isStructuralMesh && nextMat.name?.includes('Aluminium sand black')) {
@@ -141,11 +149,13 @@ export default function GarageModel() {
           if ('metalness' in nextMat) nextMat.metalness = 0.35;
           if ('roughness' in nextMat) nextMat.roughness = 0.58;
           correctedMeshes.add(child.name);
+          correctedSurface = true;
         }
 
         if (isStructuralMesh && nextMat.name?.includes('Plaster white')) {
           if ('metalness' in nextMat) nextMat.metalness = 0.02;
           if ('roughness' in nextMat) nextMat.roughness = 0.68;
+          correctedSurface = true;
         }
 
         if (isStructuralMesh && nextMat.name?.includes('Bamboo Wood')) {
@@ -153,9 +163,12 @@ export default function GarageModel() {
           if ('metalness' in nextMat) nextMat.metalness = 0.05;
           if ('roughness' in nextMat) nextMat.roughness = 0.7;
           correctedMeshes.add(child.name);
+          correctedSurface = true;
         }
 
-        clampMaterialSurface(nextMat);
+        if (isStructuralMesh || correctedSurface) {
+          clampMaterialSurface(nextMat);
+        }
 
         if (isStructuralMesh) {
           nextMat.side = THREE.DoubleSide;

@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
+import * as THREE from 'three';
 import Experience from './Experience';
 
 export default function SceneCanvas() {
@@ -12,6 +13,12 @@ export default function SceneCanvas() {
           shadows
           dpr={[1, 2]}
           gl={{ antialias: true }}
+          onCreated={({ gl }) => {
+            gl.outputColorSpace = THREE.SRGBColorSpace;
+            gl.toneMapping = THREE.ACESFilmicToneMapping;
+            gl.toneMappingExposure = 0.96;
+            gl.shadowMap.type = THREE.PCFSoftShadowMap;
+          }}
           // Match the larger garage_scene3 room so distant walls and ceiling do not clip.
           camera={{ position: [0, 1.6, 0], fov: 65, near: 0.1, far: 80 }}
           style={{ width: '100%', height: '100%' }}
