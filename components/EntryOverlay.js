@@ -39,10 +39,11 @@ export default function EntryOverlay() {
         opacity: hidden ? 0 : 1,
         pointerEvents: hidden ? 'none' : 'auto',
         transition: 'opacity 420ms ease',
+        backgroundColor: '#05070d',
         backgroundImage: `linear-gradient(135deg, rgba(6, 10, 18, 0.18), rgba(6, 10, 18, 0.72)), url("${HERO_IMAGE}")`,
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
+        backgroundSize: 'cover, contain',
       }}
     >
       <button
