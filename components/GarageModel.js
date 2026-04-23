@@ -28,6 +28,10 @@ const HIDDEN_MESHES = new Set([
 const STRUCTURAL_NAME_RE = /wall|ceiling|floor|garage_door|door_frame/i;
 const INTENTIONALLY_DARK_RE = /Slate black Wall Paint|Wood Black UA|Aluminium sand black/i;
 const NEUTRAL_FALLBACK = new THREE.Color('#7b7f87');
+const DARK_WALL_COLOR = new THREE.Color('#636872');
+const DARK_WOOD_COLOR = new THREE.Color('#54514b');
+const DARK_METAL_COLOR = new THREE.Color('#727782');
+const WOOD_PANEL_COLOR = new THREE.Color('#8a6a4c');
 
 function clampMaterialSurface(material) {
   if ('metalness' in material && typeof material.metalness === 'number') {
@@ -44,7 +48,7 @@ function hasUsableTexture(texture) {
 }
 
 export default function GarageModel() {
-  const { scene } = useGLTF('/models/garage_scene2.glb');
+  const { scene } = useGLTF('/models/garage_scene3.glb');
 
   useEffect(() => {
     const correctedMeshes = new Set();
@@ -118,6 +122,39 @@ export default function GarageModel() {
           correctedMeshes.add(child.name);
         }
 
+        if (isStructuralMesh && nextMat.name?.includes('Slate black Wall Paint')) {
+          nextMat.color = DARK_WALL_COLOR.clone();
+          if ('metalness' in nextMat) nextMat.metalness = 0.05;
+          if ('roughness' in nextMat) nextMat.roughness = 0.72;
+          correctedMeshes.add(child.name);
+        }
+
+        if (isStructuralMesh && nextMat.name?.includes('Wood Black UA')) {
+          nextMat.color = DARK_WOOD_COLOR.clone();
+          if ('metalness' in nextMat) nextMat.metalness = 0.08;
+          if ('roughness' in nextMat) nextMat.roughness = 0.78;
+          correctedMeshes.add(child.name);
+        }
+
+        if (isStructuralMesh && nextMat.name?.includes('Aluminium sand black')) {
+          nextMat.color = DARK_METAL_COLOR.clone();
+          if ('metalness' in nextMat) nextMat.metalness = 0.35;
+          if ('roughness' in nextMat) nextMat.roughness = 0.58;
+          correctedMeshes.add(child.name);
+        }
+
+        if (isStructuralMesh && nextMat.name?.includes('Plaster white')) {
+          if ('metalness' in nextMat) nextMat.metalness = 0.02;
+          if ('roughness' in nextMat) nextMat.roughness = 0.68;
+        }
+
+        if (isStructuralMesh && nextMat.name?.includes('Bamboo Wood')) {
+          nextMat.color = WOOD_PANEL_COLOR.clone();
+          if ('metalness' in nextMat) nextMat.metalness = 0.05;
+          if ('roughness' in nextMat) nextMat.roughness = 0.7;
+          correctedMeshes.add(child.name);
+        }
+
         clampMaterialSurface(nextMat);
 
         if (isStructuralMesh) {
@@ -162,4 +199,4 @@ export default function GarageModel() {
   return <primitive object={scene} />;
 }
 
-useGLTF.preload('/models/garage_scene2.glb');
+useGLTF.preload('/models/garage_scene3.glb');

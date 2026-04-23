@@ -17,12 +17,13 @@ import World from './World';
 function SceneLights() {
   return (
     <>
-      <ambientLight intensity={0.85} color="#f1f3f6" />
+      <ambientLight intensity={0.35} color="#eef2f7" />
+      <hemisphereLight intensity={0.25} color="#edf3ff" groundColor="#5f5a54" />
       <directionalLight
         position={[10, 12, 8]}
-        intensity={1.45}
+        intensity={0.55}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[1024, 1024]}
         shadow-camera-near={0.5}
         shadow-camera-far={80}
         shadow-camera-left={-20}
@@ -30,6 +31,7 @@ function SceneLights() {
         shadow-camera-top={20}
         shadow-camera-bottom={-20}
       />
+      <pointLight position={[0, 3.8, 0]} intensity={0.9} distance={18} color="#f3f6fb" />
     </>
   );
 }

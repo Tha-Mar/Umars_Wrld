@@ -11,7 +11,7 @@ const SENSITIVITY = 0.002; // mouse look — lower = slower turn, higher = snapp
 const EYE_OFFSET  = 0.7;   // camera height above capsule centre
 const INITIAL_YAW = Math.PI; // face 180 degrees opposite on load
 //
-// World-space room (garage_scene2.glb):
+// World-space room (garage_scene3.glb):
 //   Floor Y = 0. Ceiling Y ≈ 4.2. Room ≈ 18.7 wide × 8.2 deep.
 //
 // Capsule: halfHeight=0.6, radius=0.3 → total 1.8 units

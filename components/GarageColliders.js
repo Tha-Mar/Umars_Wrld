@@ -5,7 +5,7 @@ import { useGLTF } from '@react-three/drei';
 import { RigidBody, TrimeshCollider, CuboidCollider } from '@react-three/rapier';
 
 /*
- * GarageColliders: collision geometry for garage_scene2.glb
+ * GarageColliders: collision geometry for garage_scene3.glb
  *
  * Root scene orientation:
  *   Three.js v176 GLTFLoader applies NO global transform to the scene Group.
@@ -46,7 +46,7 @@ const WH = 5;      // wall half-height (taller than room to avoid gaps)
 const WT = 0.25;   // wall half-thickness
 
 export default function GarageColliders() {
-  const { scene } = useGLTF('/models/garage_scene2.glb');
+  const { scene } = useGLTF('/models/garage_scene3.glb');
 
   const trimeshes = useMemo(() => {
     scene.updateMatrixWorld(true);
