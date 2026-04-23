@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
+import * as THREE from 'three';
 
 /*
  * GarageModel: pure environment renderer.
@@ -47,6 +48,20 @@ export default function GarageModel() {
 
       material.forEach((mat) => {
         if (!mat) return;
+
+        // Lift the fully black room finishes so they read more like dark painted walls.
+        if (mat.name?.includes('Slate black Wall Paint')) {
+          mat.color = new THREE.Color('#2a2a2f');
+          if ('roughness' in mat) mat.roughness = 0.88;
+        }
+
+        // Let the built-in model lights actually glow a bit in the scene.
+        if (mat.name?.includes('Glowing glass green')) {
+          if ('emissive' in mat) mat.emissive = new THREE.Color('#d7fff2');
+          if ('emissiveIntensity' in mat) mat.emissiveIntensity = 3.5;
+          if ('toneMapped' in mat) mat.toneMapped = false;
+        }
+
         if (
           mat.name?.includes('Glass') ||
           mat.name?.includes('glass') ||
@@ -54,7 +69,11 @@ export default function GarageModel() {
         ) {
           child.castShadow = false;
           mat.depthWrite = false;
+          if ('envMapIntensity' in mat) mat.envMapIntensity = 1.25;
+          if ('opacity' in mat && mat.opacity < 0.6) mat.opacity = Math.max(mat.opacity, 0.32);
           mat.needsUpdate = true;
+        } else if ('envMapIntensity' in mat) {
+          mat.envMapIntensity = 0.85;
         }
       });
     });

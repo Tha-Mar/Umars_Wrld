@@ -47,8 +47,8 @@ export default function World() {
 
         {/* Hotspot: car interaction — adjust position/radius to match visual */}
         <Hotspot
-          position={[-2, 0, -2]}
-          radius={3}
+          position={[-2.53, 1.03, -9.9]}
+          radius={2.6}
           prompt="Press E to interact"
           audioSrc="/audio/Ranting.mp3"
         />
