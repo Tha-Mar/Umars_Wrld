@@ -170,6 +170,10 @@ export default function GarageModel() {
           clampMaterialSurface(nextMat);
         }
 
+        if ('envMapIntensity' in nextMat) {
+          nextMat.envMapIntensity = isStructuralMesh ? 0.55 : 1.1;
+        }
+
         if (isStructuralMesh) {
           nextMat.side = THREE.DoubleSide;
         }

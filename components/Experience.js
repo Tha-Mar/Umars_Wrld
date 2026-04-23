@@ -1,5 +1,6 @@
 'use client';
 
+import { Environment } from '@react-three/drei';
 import World from './World';
 
 /*
@@ -14,65 +15,30 @@ import World from './World';
  *   <PlayerController />  if camera rig logic needs to move up out of Player
  */
 
-function ShowroomLights() {
+function CinematicLights() {
   return (
     <>
-      <ambientLight intensity={0.16} color="#fff8f2" />
-      <hemisphereLight intensity={0.38} color="#fff9f4" groundColor="#817468" />
-
+      <Environment preset="warehouse" intensity={0.36} />
+      <ambientLight intensity={0.035} color="#f1eeea" />
       <group rotation={[0, Math.PI / 2, 0]}>
         <directionalLight
-          position={[6, 8, 4]}
-          intensity={0.22}
-          color="#fff5ea"
+          position={[8, 10, 5]}
+          intensity={0.58}
+          color="#fff3e7"
+          castShadow
+          shadow-mapSize={[2048, 2048]}
+          shadow-camera-near={0.5}
+          shadow-camera-far={40}
+          shadow-camera-left={-14}
+          shadow-camera-right={14}
+          shadow-camera-top={14}
+          shadow-camera-bottom={-14}
+          shadow-bias={-0.00015}
         />
         <directionalLight
-          position={[-5, 6, -3]}
-          intensity={0.1}
-          color="#eef6ff"
-        />
-
-        <spotLight
-          position={[-1.4, 4.6, 0]}
-          intensity={18}
-          angle={0.95}
-          penumbra={1}
-          distance={22}
-          decay={1.7}
-          color="#fff8ef"
-        />
-        <spotLight
-          position={[4.4, 4.8, -2.7]}
-          intensity={14}
-          angle={0.82}
-          penumbra={1}
-          distance={18}
-          decay={1.8}
-          color="#f4f8ff"
-        />
-        <spotLight
-          position={[4.4, 4.5, 2.7]}
-          intensity={12}
-          angle={0.82}
-          penumbra={1}
-          distance={18}
-          decay={1.8}
-          color="#fff1e2"
-        />
-
-        <pointLight
-          position={[1.5, 2.4, 0]}
-          intensity={0.3}
-          distance={18}
-          decay={2}
-          color="#ffe7d2"
-        />
-        <pointLight
-          position={[-4.8, 2.6, 0]}
-          intensity={0.22}
-          distance={16}
-          decay={2}
-          color="#fff3e7"
+          position={[-6, 5, -8]}
+          intensity={0.18}
+          color="#dbe7f7"
         />
       </group>
     </>
@@ -82,7 +48,7 @@ function ShowroomLights() {
 export default function Experience() {
   return (
     <>
-      <ShowroomLights />
+      <CinematicLights />
       <World />
     </>
   );
