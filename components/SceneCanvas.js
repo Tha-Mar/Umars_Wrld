@@ -35,7 +35,7 @@ export default function SceneCanvas() {
           // Z 0.40 = just inside the entrance (front face at Z 0.33).
           // Y 0.10 = eye level (~60% up a 2.5-unit room).
           // FOV 70 adds perceived depth; near 0.05 prevents clipping near walls.
-          camera={{ position: [0, -0.1, 0.40], fov: 70, near: 0.05, far: 8 }}
+          camera={{ position: [0, -0.10, 0.40], fov: 70, near: 0.05, far: 8 }}
           style={{ width: '100%', height: '100%' }}
         >
           <Experience />
