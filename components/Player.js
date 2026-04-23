@@ -9,6 +9,7 @@ import * as THREE from 'three';
 const SPEED       = 5;     // units/sec
 const SENSITIVITY = 0.002; // mouse look — lower = slower turn, higher = snappier
 const EYE_OFFSET  = 0.7;   // camera height above capsule centre
+const INITIAL_YAW = Math.PI; // face 180 degrees opposite on load
 //
 // World-space room (garage_scene2.glb):
 //   Floor Y = 0. Ceiling Y ≈ 4.2. Room ≈ 18.7 wide × 8.2 deep.
@@ -26,7 +27,7 @@ export default function Player() {
   const rb      = useRef();
   const moveDir = useRef(new THREE.Vector3());
   const keys    = useRef({ w: false, a: false, s: false, d: false });
-  const yaw     = useRef(0);
+  const yaw     = useRef(INITIAL_YAW);
   const pitch   = useRef(0);
   const locked  = useRef(false);
 
@@ -35,6 +36,7 @@ export default function Player() {
   // Rotation order must be YXZ for correct first-person look.
   useEffect(() => {
     camera.rotation.order = 'YXZ';
+    camera.rotation.y = INITIAL_YAW;
   }, [camera]);
 
   // Pointer lock — click canvas to capture mouse, Escape to release.
