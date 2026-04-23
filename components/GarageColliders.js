@@ -45,6 +45,30 @@ const HZ = 4.08;   // room half-depth
 const WH = 5;      // wall half-height (taller than room to avoid gaps)
 const WT = 0.25;   // wall half-thickness
 
+// Large prop blockers derived from the GLB bounds so major objects feel solid.
+const PROP_COLLIDERS = [
+  {
+    name: 'car',
+    position: [-2.11, 0.88, -1.94],
+    halfExtents: [2.95, 0.95, 1.22],
+  },
+  {
+    name: 'character_display_right',
+    position: [9.9, 1.03, -2.53],
+    halfExtents: [0.7, 1.1, 0.72],
+  },
+  {
+    name: 'character_display_center',
+    position: [-2.85, 1.21, 2.28],
+    halfExtents: [1.02, 0.64, 1.0],
+  },
+  {
+    name: 'character_display_left',
+    position: [6.75, 0.41, -0.02],
+    halfExtents: [0.5, 0.5, 0.5],
+  },
+];
+
 export default function GarageColliders() {
   const { scene } = useGLTF('/models/garage_scene3.glb');
 
@@ -86,6 +110,13 @@ export default function GarageColliders() {
         <CuboidCollider args={[HX, WH, WT]} position={[CX, WH, -4.08]} />
         {/* +Z wall */}
         <CuboidCollider args={[HX, WH, WT]} position={[CX, WH, 4.08]} />
+      </RigidBody>
+
+      {/* Major props — simple blockers for car and character displays */}
+      <RigidBody type="fixed">
+        {PROP_COLLIDERS.map(({ name, position, halfExtents }) => (
+          <CuboidCollider key={name} args={halfExtents} position={position} />
+        ))}
       </RigidBody>
     </>
   );
